@@ -141,13 +141,3 @@ This app does not use a database. It stores the short–original URL mappings in
 ## 👨‍💻 Author
 
 Developed by [Anwesh](https://github.com/Anwesh13)
-
----
-
-## 📄 License
-
-This project is open-source and licensed under the MIT License.
-
----
-
-**Made with ❤️ using Laravel 12**
