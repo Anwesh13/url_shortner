@@ -1,66 +1,153 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+# 🔗 Laravel 12 URL Shortener
 
-## About Laravel
+A lightweight Laravel 12 application that lets you:
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- ✅ Shorten long URLs like `https://github.com/Anwesh13`
+- ✅ Get short URLs like `http://short.est/XyZ123`
+- ✅ Decode shortened URLs back to the original
+- ✅ Use the service via terminal (`curl`) or browser
+- ✅ No database needed — works entirely in memory using Laravel Cache
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+This project includes a simple frontend built into Laravel's `welcome.blade.php` for browser usage.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+---
 
-## Learning Laravel
+## 🚀 Features
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+- REST API with `/api/encode` and `/api/decode`
+- Blade-powered frontend at `http://127.0.0.1:8000`
+- Works offline — no external service required
+- Laravel 12 cache-based storage (no DB setup)
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+---
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## 🛠 Requirements
 
-## Laravel Sponsors
+To run this project, you’ll need PHP 8.1 or higher, Composer, and Git. Laravel CLI is optional but helpful.
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+---
 
-### Premium Partners
+## ⚙️ Installation
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+First, clone the repository using the command:
 
-## Contributing
+```bash
+git clone https://github.com/Anwesh13/url_shortner.git
+cd url_shortner
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Once inside the project directory, install the required dependencies:
 
-## Code of Conduct
+```bash
+composer install
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+Next, copy the example environment file and generate the application key:
 
-## Security Vulnerabilities
+```bash
+cp .env.example .env
+php artisan key:generate
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+Make sure your Laravel 12 app is correctly loading the API routes. Open `bootstrap/app.php` and confirm the following routing block is included:
 
-## License
+```php
+return Application::configure(basePath: dirname(__DIR__))
+    ->withRouting(
+        web: __DIR__.'/../routes/web.php',
+        api: __DIR__.'/../routes/api.php',
+        commands: __DIR__.'/../routes/console.php',
+        health: '/up',
+    )
+    ->withMiddleware(function (Middleware $middleware) {
+        //
+    })
+    ->withExceptions(function (Exceptions $exceptions) {
+        //
+    })
+    ->create();
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Once that’s confirmed, you're ready to go.
+
+To start the application, run:
+
+```bash
+php artisan serve
+```
+
+Then open your browser and go to:
+
+```
+http://127.0.0.1:8000
+```
+
+---
+
+## 🌐 Using the App in Browser
+
+The homepage includes a built-in UI where you can paste a long URL and click **"Shorten"** to get a short URL like `http://short.est/XyZ123`. You can also paste a short URL and click **"Decode"** to get the original back.
+
+---
+
+## 🧪 Using the API with cURL
+
+To shorten a URL using the terminal, run:
+
+```bash
+curl -X POST http://127.0.0.1:8000/api/encode   -H "Content-Type: application/json"   -d '{"url": "https://github.com/Anwesh13"}'
+```
+
+This will return a response like:
+
+```json
+{
+  "short_url": "http://short.est/XyZ123"
+}
+```
+
+To decode it back:
+
+```bash
+curl -X POST http://127.0.0.1:8000/api/decode   -H "Content-Type: application/json"   -d '{"short_url": "http://short.est/XyZ123"}'
+```
+
+And you’ll get:
+
+```json
+{
+  "original_url": "https://github.com/Anwesh13"
+}
+```
+
+---
+
+## 📁 Project Structure
+
+- `routes/api.php`: Handles `/api/encode` and `/api/decode`
+- `routes/web.php`: Loads the Blade view
+- `resources/views/welcome.blade.php`: UI for encoding/decoding URLs
+- `bootstrap/app.php`: Laravel 12 routing configuration
+
+---
+
+## 💾 No Database Required
+
+This app does not use a database. It stores the short–original URL mappings in Laravel's in-memory cache. That means it's super lightweight and works instantly — no migration or DB setup needed.
+
+---
+
+## 👨‍💻 Author
+
+Developed by [Anwesh](https://github.com/Anwesh13)
+
+---
+
+## 📄 License
+
+This project is open-source and licensed under the MIT License.
+
+---
+
+**Made with ❤️ using Laravel 12**
